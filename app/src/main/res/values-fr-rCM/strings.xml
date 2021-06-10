@@ -4,4 +4,5 @@
     <string name="button1">bouton</string>
     <string name="button2">bouton</string>
     <string name="button3">bouton</string>
+    <string name="spin_message">changer</string>
 </resources>

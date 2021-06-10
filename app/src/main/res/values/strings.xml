@@ -1,7 +1,10 @@
 <resources>
-    <string name="app_name">Cinthia\'s Android Labs</string>
-    <string name="button1">Button</string>
-    <string name="button2">Button</string>
-    <string name="button3">Button</string>
+    <string name="app_name" translatable="false">Cinthia\'s Android Labs</string>
+    <string name="button1" translatable="false">Button</string>
+    <string name="button2" translatable="false">Button</string>
+    <string name="button3" translatable="false">Button</string>
+    <string name="Switch" translatable="false">Switch</string>
+    <string name="spin_message" translatable="false">S</string>
+
 
 </resources>
