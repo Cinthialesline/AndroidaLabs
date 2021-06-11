@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Laboratoires Android de Cinthia</string>
-    <string name="button1">bouton</string>
-    <string name="button2">bouton</string>
-    <string name="button3">bouton</string>
-    <string name="spin_message">changer</string>
+    <string name="emailtxt" translatable="false">Entrez votre adresse email</string>
+    <string name="editemail">entre votre email ici</string>
+    <string name="passwordtxt">ENTRE VOTRE MOT DE PASSE</string>
+    <string name="button" translatable="false">CONNEXION</string>
 </resources>
