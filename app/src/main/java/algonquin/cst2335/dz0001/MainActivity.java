@@ -1,6 +1,8 @@
 package algonquin.cst2335.dz0001;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -12,24 +14,46 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     private static String TAG = "MainActivity";
+
+    SharedPreferences prefs ;
+    String savedString;
+    String lol;
+    EditText emailEditText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        prefs = getSharedPreferences("FileName", Context.MODE_PRIVATE);  //sharepref
+
+         savedString = prefs.getString("VariableName", "");
+
         Log.w("MainActivity", "In onCreate() - Loading Widgets" );
 
 
         Button loginButton= findViewById(R.id.loginButton);
-        EditText emailEditText= findViewById(R.id.emailEditText);
+         emailEditText= findViewById(R.id.emailEditText);
 
+        emailEditText.setText(savedString);
 
         loginButton.setOnClickListener(  clk -> {
-            Intent nextPage = new Intent( MainActivity.this, second_activity.class);
 
-            nextPage.putExtra( "EmailAddress", emailEditText.getText().toString() );
+            saveSharedPrefs(emailEditText.getText().toString());
+
+            Intent nextPage = new Intent( this, second_activity.class);
+
+
+            nextPage.putExtra( "EmailAddress", emailEditText.getText().toString());
             startActivity(nextPage);
         } );
     }
+
+    private void saveSharedPrefs(String toString) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("ReserveName", toString);
+        editor.commit();
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -46,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         Log.w( "MainActivity","called when activity is not visible to the user");
+
 
     }
     @Override
