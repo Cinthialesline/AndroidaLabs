@@ -14,13 +14,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CinthiasAndroidLabs">
         <activity android:name=".second_activity"></activity>
-        <activity android:name=".MainActivity">
+
+
+            <activity android:name=".ChatRoom"> </activity>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+
+            <activity android:name=".MainActivity">  </activity>
     </application>
 
 </manifest>
