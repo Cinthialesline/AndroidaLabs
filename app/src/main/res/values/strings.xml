@@ -4,6 +4,10 @@
     <string name="editemail" translatable="false">Type email here</string>
     <string name="passwordtxt" translatable="false">Type your password</string>
     <string name="button" translatable="false">"LOGIN "</string>
+    <string name="buttonsend" translatable="false">Send</string>
+    <string name="buttonRecieve" translatable="false">Recieve</string>
+    <string name="edit1" translatable="false">Message goes here</string>
+    <string name="edit2T" translatable="false">Time goes here</string>
 
 
 </resources>

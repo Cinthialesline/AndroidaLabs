@@ -5,4 +5,8 @@
     <string name="editemail">entre votre email ici</string>
     <string name="passwordtxt">ENTRE VOTRE MOT DE PASSE</string>
     <string name="button" translatable="false">CONNEXION</string>
+    <string name="buttonsend" translatable="false">Envio</string>
+    <string name="buttonRecieve" translatable="false">Rcevior</string>
+    <string name="edit1">Le message vien la</string>
+    <string name="edit2T" translatable="false">L\'heure par ici</string>
 </resources>
