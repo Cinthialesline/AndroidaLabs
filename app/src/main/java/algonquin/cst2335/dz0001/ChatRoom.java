@@ -1,6 +1,7 @@
 package algonquin.cst2335.dz0001;
 
 import android.os.Bundle;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -27,14 +29,15 @@ public class ChatRoom extends AppCompatActivity {
     ArrayList<ChatMessage> messages = new ArrayList<>();//hold our typed messages
     MyChatAdapter adt;
     ImageView imageView;
+    Button submit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.chatlayout);
+        setContentView(R.layout.chatlayout); //load xml
 
-        EditText messageTyped = findViewById(R.id.edit);
-        Button send = findViewById(R.id.sendbutton);
+        EditText edittext = findViewById(R.id.edit);
+       submit = findViewById(R.id.sendbutton);
         Button recieve = findViewById(R.id.buttonR);
         imageView=findViewById(R.id.image);
         chatList = findViewById(R.id.myrecycler);
@@ -44,13 +47,16 @@ public class ChatRoom extends AppCompatActivity {
         chatList.setLayoutManager(new LinearLayoutManager(this));
 
 
-        send.setOnClickListener(click -> {
-            //ChatMessage thisMessage = new ChatMessage
-            //( /* What string is in the EditText */, /* 1 for Send, 2 for Receive */,  /* The current time */ );
-                    ChatMessage nextMessage = new ChatMessage(messageTyped.getText().toString(), );
-                    messages.add(nextMessage);//adds to array list
+        submit.setOnClickListener(click -> {
+            String whatisType=edittext.getText().toString();
+                Date timeNow =new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("EEEE,dd-MMM-yyyy-hh-mm-ss a", Locale.getDefault());
+
+            String currentDateandTime = sdf.format(timeNow);
+
+            messages.add(new ChatMessage(whatisType,currentDateandTime));//adds to array list
                     //clear the edittext:
-                    messageTyped.setText("");
+            edittext.setText("");
                     //refresh the list:
                     adt.notifyItemInserted(messages.size() - 1); //just insert the new row:
                 }
@@ -59,30 +65,33 @@ public class ChatRoom extends AppCompatActivity {
 
 
     // create a class to represent a row
-    private class MyRowViews extends RecyclerView.ViewHolder {
-        TextView messageText;
-        TextView timeText;
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView messageView;
+        TextView timeView;
         int position=-1;
 
-        public MyRowViews(View itemView) { //the view pass out represnt the constraint layout wc is the root of the row
+        public MyViewHolder(View itemView) { //the view pass out represnt the constraint layout wc is the root of the row
             super(itemView);
+            messageView=itemView.findViewById(R.id.textView);
+            timeView=itemView.findViewById(R.id.time);
 
             itemView.setOnClickListener(click->{
+                int position=getAbsoluteAdapterPosition(); //had to check with the build in gradle
+                ChatMessage whatWasClicked =messages.get(position);
+
                 AlertDialog.Builder builder = new AlertDialog.Builder( ChatRoom.this );
                 builder.setTitle("Question:");
-                builder.setMessage("Do you want to delee the message:" + messageText.getText());
-                builder.setNegativeButton("No", (dialog,cl)->{ });
+                builder.setMessage("Do you want to delete this message:" + whatWasClicked.getMessage());
+                builder.setNegativeButton("No", (dialog,cl1)->{ });
 
-                builder.setPositiveButton("Yes", (dialog,cl)->{
-
-                    position=getAbsoluteAdapterPosition();
-                    ChatMessage removedMessage=messages.get(position);
-
+                builder.setPositiveButton("Yes", (dialog,cl2)->{
                     messages.remove(position);
                     adt.notifyItemRemoved(position); //remove and update the recycle view
-                    Snackbar.make(messageText, "Do you want to delete the mssage:"+ position,  Snackbar.LENGTH_LONG)
+                                  //anything on screen at the present moment
+                    Snackbar.make(submit, "Do you want to delete item #"+ position,  Snackbar.LENGTH_LONG)
                             .setAction("Undo", clk->{
-                                messages.remove(position,removedMessage); //stoes message before is removed from ArrayList
+                              //  messages.remove(position,removedMessage); //stoes message before is removed from ArrayList
+                                messages.add(position, whatWasClicked);
                                 adt.notifyItemRemoved(position);
                             })
                             .show();
@@ -90,8 +99,8 @@ public class ChatRoom extends AppCompatActivity {
                 builder.create().show();
 
             });
-            messageText = itemView.findViewById(R.id.message); // qtn so we aren't using the sent_message layout but recycler
-            timeText = itemView.findViewById(R.id.time);      // so were are all this ids coming from
+            messageView = itemView.findViewById(R.id.message); // qtn so we aren't using the sent_message layout but recycler
+            timeView = itemView.findViewById(R.id.time);      // so were are all this ids coming from
         }
         public void setPosition(int p){
             position=p;
@@ -100,30 +109,28 @@ public class ChatRoom extends AppCompatActivity {
     }
 
 
-    private class MyChatAdapter extends RecyclerView.Adapter {
+    private class MyChatAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
 
         @Override
-        public MyRowViews onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater inflater = getLayoutInflater(); //IS TO LOAD A LAYOUT FROM SEND_MESSAGE.XML FILE
-            int layoutID;
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater in = getLayoutInflater(); //IS TO LOAD A LAYOUT FROM SEND_MESSAGE.XML FILE
+            View loadedRow;
             if (viewType==1)
-                //setImageBitmap(imageView);
-                layoutID=R.layout.sent_message;
-            else
-                layoutID=R.layout.recieve_message;
-            View loadedRow = inflater.inflate(R.layout.sent_message, parent, false);
-            MyRowViews initRow = new MyRowViews(loadedRow); // CONSTRUCTOR NEEDED A VIEW? DON'T GET IT
-            return initRow;
+                loadedRow = in.inflate(R.layout.sent_message, parent, false);
+                else
+             loadedRow = in.inflate(R.layout.recieve_message, parent, false);// CONSTRUCTOR to inflate the view
+            return new MyViewHolder(loadedRow);
         }
 
-
         @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            MyRowViews thisRowLayout = (MyRowViews)holder;
-            thisRowLayout.messageText.setText(messages.get(position).getMessage());
-            thisRowLayout.timeText.setText((CharSequence) messages.get(position).getTimeSent()); //required me to return a java charsequence
-            thisRowLayout.setPosition(position);
+        public void onBindViewHolder(MyViewHolder holder, int position) { //need an arraylist to holder
+
+            ChatMessage thisRow=messages.get(position);
+            holder.timeView.setText( thisRow.getTimeSent() );//what time goes on row position
+            holder.messageView.setText( thisRow.getMessage() );//what message goes on row position
+
+
         }
 
         @Override
@@ -131,12 +138,11 @@ public class ChatRoom extends AppCompatActivity {
             return messages.size();
         }
 
-        @Override
-             //ChatMessage
+
         public int getItemViewType(int position) {
-            ChatMessage thisRow = messages.get(position);
-           // return super.getItemViewType(position);
-            return thisRow;
+           // messages.get(position).getSentOrRecieve();// will return an interger
+
+            return 0;
         }
     }
 
@@ -145,25 +151,18 @@ public class ChatRoom extends AppCompatActivity {
     private class ChatMessage {
 
         String message;
-        int sendOrReceive;
-        Date timeSent;
+       // int sendOrReceive;
+        String timeSent;
 
-        public ChatMessage(String s) {
-            message = s;
-        }
-
-        public ChatMessage(String message, int sendOrReceive, Date timeSent) {
+        public ChatMessage(String message, String timeSent) {
             this.message = message;
-            this.sendOrReceive = sendOrReceive;
+          //  this.sendOrReceive = sendOrReceive;
             this.timeSent = timeSent;
         }
 
 
-        public Date getTimeSent() {
-            SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd-MMM-yyyy hh-mm-ss a", Locale.getDefault());
+        public String getTimeSent() {
 
-            String currentDateandTime = sdf.format(new Date());
-            // timeSent =currentDateandTime;
             return timeSent;
         }
 
@@ -171,9 +170,10 @@ public class ChatRoom extends AppCompatActivity {
             return message;
         }
 
-        public int getSendOrReceive() {
-            return sendOrReceive;
-        }
+       /// public int getSendOrReceive() {
+           // return sendOrReceive;
+       // }
     }
+
 }
 

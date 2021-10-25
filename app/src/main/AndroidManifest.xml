@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="algonquin.cst2335.dz0001">
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
+<!-- remove all the stuffs for lab4-->
     <uses-feature android:name="android.hardware.camera" android:required="true" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
 
 
     <application
@@ -13,17 +13,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CinthiasAndroidLabs">
-        <activity android:name=".second_activity"></activity>
+        <activity android:name=".ChatRoom">
 
+        <intent-filter>  <!-- shows what will run first-->
+            <action android:name="android.intent.action.MAIN" />
 
-            <activity android:name=".ChatRoom"> </activity>
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        </activity>
 
-            <activity android:name=".MainActivity">  </activity>
+        <activity android:name=".second_activity">
+        </activity>
+
+            <activity android:name=".MainActivity">
+            </activity>
     </application>
 
 </manifest>

@@ -8,6 +8,7 @@
     <string name="buttonRecieve" translatable="false">Recieve</string>
     <string name="edit1" translatable="false">Message goes here</string>
     <string name="edit2T" translatable="false">Time goes here</string>
+    <string name="type_here">type here</string>
 
 
 </resources>
