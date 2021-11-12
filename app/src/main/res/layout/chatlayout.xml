@@ -28,7 +28,7 @@
         app:layout_constraintStart_toEndOf="@+id/edit" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/myrecycler"
+        android:id="@+id/myRecycler"
         android:layout_width="409dp"
         android:layout_height="655dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -38,17 +38,16 @@
 
     <EditText
         android:id="@+id/edit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_width="201dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="2dp"
         android:ems="10"
+        android:hint="@string/type_here"
         android:inputType="text"
-        android:text="@string/type_here"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/buttonR"
-        app:layout_constraintHorizontal_bias="0.812"
-        app:layout_constraintStart_toEndOf="@+id/sendbutton"
-        app:layout_constraintTop_toBottomOf="@+id/myrecycler" />
+        app:layout_constraintStart_toEndOf="@+id/sendbutton" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

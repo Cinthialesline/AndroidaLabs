@@ -9,5 +9,5 @@
     <string name="buttonRecieve" translatable="false">Rcevior</string>
     <string name="edit1">Le message vien la</string>
     <string name="edit2T" translatable="false">L\'heure par ici</string>
-    <string name="type_here">type here</string>
+    <string name="type_here">      type here</string>
 </resources>
