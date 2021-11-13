@@ -57,12 +57,12 @@ public class ChatRoom extends AppCompatActivity {
 
         while( results.moveToNext() ) //returns false if no more data
         { //pointing to row 2
-            int id = results.getInt(idIndex);
+            long id = results.getInt(idIndex);
             String message = results.getString( messageIndex );
             int sendOrRecieve = results.getInt(sOrRIndex);
             String time = results.getString( timeIndex);
 
-            //add to arrayList:
+            //add to arrayList:                                     //id
             messages.add(new ChatMessage(message,sendOrRecieve,time,id) );
         }
 
@@ -86,24 +86,19 @@ public class ChatRoom extends AppCompatActivity {
             String currentDateandTime = sdf.format(timeNow);
 
             ContentValues newRow = new ContentValues();// like intent or Bundle
-            //Message column:        //name of tabke name
-            newRow.put( MyOpenHelper.COL_MESSAGE , whatisType  ); //got tospecify what goes into each rows
-
-            //Send or receive column:
-            newRow.put(MyOpenHelper.COL_SEND_RECEIVE, 1);
-
-            //TimeSent column:
-            newRow.put( MyOpenHelper.COL_TIME_SENT, currentDateandTime );
-
-            //now that columns are full, you insert:
-            //incase misssing a variable the database should set null in the columns
-            long id = theDatabase.insert( MyOpenHelper.TABLE_NAME, null, newRow ); //returns the id
-
+//            //Message column:        //name of tabke name
+           newRow.put( MyOpenHelper.COL_MESSAGE , whatisType  ); //got tospecify what goes into each rows
+          newRow.put(MyOpenHelper.COL_SEND_RECEIVE, 1);
+           newRow.put( MyOpenHelper.COL_TIME_SENT, currentDateandTime );
+            long id = theDatabase.insert( MyOpenHelper.TABLE_NAME, MyOpenHelper.COL_MESSAGE, newRow );
+            //messages.add(cm);
+            edittext.setText("");
             ChatMessage cm=new ChatMessage(whatisType,1,currentDateandTime,id);
-            messages.add(cm);
+          messages.add(cm);
+            edittext.setText("");
             //refresh the list:
-            /*  adt.notifyItemInserted(messages.size() - 1); //just insert the new row:*/
-            //adt.notifyDataSetChanged();
+              adt.notifyItemInserted(messages.size() - 1); //just insert the new row:*/
+            adt.notifyDataSetChanged();
             Toast.makeText(this, "View Updated", Toast.LENGTH_LONG).show();
 
         });
