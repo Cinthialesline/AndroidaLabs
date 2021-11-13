@@ -87,17 +87,17 @@ public class ChatRoom extends AppCompatActivity {
 
             ContentValues newRow = new ContentValues();// like intent or Bundle
 //            //Message column:        //name of tabke name
-           newRow.put( MyOpenHelper.COL_MESSAGE , whatisType  ); //got tospecify what goes into each rows
-          newRow.put(MyOpenHelper.COL_SEND_RECEIVE, 1);
-           newRow.put( MyOpenHelper.COL_TIME_SENT, currentDateandTime );
+            newRow.put( MyOpenHelper.COL_MESSAGE , whatisType  ); //got tospecify what goes into each rows
+            newRow.put(MyOpenHelper.COL_SEND_RECEIVE, 1);
+            newRow.put( MyOpenHelper.COL_TIME_SENT, currentDateandTime );
             long id = theDatabase.insert( MyOpenHelper.TABLE_NAME, MyOpenHelper.COL_MESSAGE, newRow );
             //messages.add(cm);
             edittext.setText("");
             ChatMessage cm=new ChatMessage(whatisType,1,currentDateandTime,id);
-          messages.add(cm);
+            messages.add(cm);
             edittext.setText("");
             //refresh the list:
-              adt.notifyItemInserted(messages.size() - 1); //just insert the new row:*/
+            adt.notifyItemInserted(messages.size() - 1); //just insert the new row:*/
             adt.notifyDataSetChanged();
             Toast.makeText(this, "View Updated", Toast.LENGTH_LONG).show();
 
@@ -123,32 +123,43 @@ public class ChatRoom extends AppCompatActivity {
             imageView = itemView.findViewById(R.id.imageView);
             view = itemView;
 
-           /* itemView.setOnClickListener(click->{
-               // int position=getAbsoluteAdapterPosition(); //had to check with the build in gradle
-                ChatMessage whatWasClicked =messages.get(position);
-
-                AlertDialog.Builder builder = new AlertDialog.Builder( ChatRoom.this );
-                builder.setTitle("Question:");
-                builder.setMessage("Do you want to delete this message:" + whatWasClicked.getMessage());
-                builder.setNegativeButton("No", (dialog,cl1)->{ });
-
-                builder.setPositiveButton("Yes", (dialog,cl2)->{
-                    messages.remove(position);
-                    adt.notifyItemRemoved(position); //remove and update the recycle view
-                                  //anything on screen at the present moment
-                    Snackbar.make(submit, "Do you want to delete item #"+ position,  Snackbar.LENGTH_LONG)
-                            .setAction("Undo", clk->{
-                              //  messages.remove(position,removedMessage); //stoes message before is removed from ArrayList
-                                messages.add(position, whatWasClicked);
-                                adt.notifyItemRemoved(position);
-                            })
-                            .show();
-                });
-                builder.create().show();
-
-            });*/
-            //messageView = itemView.findViewById(R.id.message); // qtn so we aren't using the sent_message layout but recycler
-            //timeView = itemView.findViewById(R.id.time);      // so were are all this ids coming from
+//            itemView.setOnClickListener( click -> {
+//                final SQLiteDatabase theDatabase= opener.getWritableDatabase();
+//                int position = getAbsoluteAdapterPosition();//which row was clicked.
+//                //Message
+//                ChatMessage whatWasClicked = messages.get(position);
+//
+//                AlertDialog.Builder builder = new AlertDialog.Builder( ChatRoom.this );
+//
+//                builder.setTitle("Question:")
+//                        .setMessage("Do you want to delete this:" + whatWasClicked.getMessage())
+//                        .setNegativeButton("Negative", (dialog, click1)->{ })
+//                        .setPositiveButton("Positive", (dialog, click2)->{
+//                            //actually delete something:
+//
+//
+//                            messages.remove(position);
+//                            adt.notifyItemRemoved(position);
+//                            Snackbar.make(submit, "You removed item # " + position, Snackbar.LENGTH_LONG)
+//                                    .setAction("Undo", (click4)-> {
+//                                        messages.add(position, whatWasClicked);
+//                                        adt.notifyItemInserted(position);
+//                                        //reinsert into the database
+//                                        theDatabase.execSQL( String.format( " Insert into %s values (\"%d\", \"%s\", \"%d\", \"%s\" );",
+//                                                MyOpenHelper.TABLE_NAME      , whatWasClicked.getId()  , whatWasClicked.getMessage() , 1  , whatWasClicked.getTimeSent()));
+//
+//                                    })
+//                                    .show();
+//                            //delete from database:, returns number of rows deleted
+//                            theDatabase.delete(MyOpenHelper.TABLE_NAME,
+//                                    MyOpenHelper.COL_ID +" = ?", new String[] { Long.toString( whatWasClicked.getId() )  });
+//                        }).create().show();
+//                //                .setNeutralButton("Neutral", (dialog, click3)-> {})
+//
+//            });
+//
+//        //    timeView = itemView.findViewById(R.id.time);
+//         //   messageView = itemView.findViewById(R.id.message);
         }
 
     }
