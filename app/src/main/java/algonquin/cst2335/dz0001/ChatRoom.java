@@ -1,6 +1,9 @@
 package algonquin.cst2335.dz0001;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import android.view.LayoutInflater;
@@ -33,11 +36,36 @@ public class ChatRoom extends AppCompatActivity {
     MyChatAdapter adt;
     ImageView imageView;
     Button submit;
+    MyOpenHelper opener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chatlayout); //load xml
+
+        opener= new MyOpenHelper(this);
+
+        //OPEN DATABASE
+        final SQLiteDatabase theDatabase= opener.getWritableDatabase();
+        Cursor results =  theDatabase.rawQuery( "Select * from " + MyOpenHelper.TABLE_NAME + ";", null );
+
+        //Convert column names to indices:
+        int idIndex = results.getColumnIndex( MyOpenHelper.COL_ID );
+        int  messageIndex = results.getColumnIndex( MyOpenHelper.COL_MESSAGE);
+        int sOrRIndex = results.getColumnIndex( MyOpenHelper.COL_SEND_RECEIVE);
+        int timeIndex = results.getColumnIndex( MyOpenHelper.COL_TIME_SENT );
+
+        while( results.moveToNext() ) //returns false if no more data
+        { //pointing to row 2
+            int id = results.getInt(idIndex);
+            String message = results.getString( messageIndex );
+            int sendOrRecieve = results.getInt(sOrRIndex);
+            String time = results.getString( timeIndex);
+
+            //add to arrayList:
+            messages.add(new ChatMessage(message,sendOrRecieve,time,id) );
+        }
+
 
         EditText edittext = findViewById(R.id.edit);
         submit = findViewById(R.id.sendbutton);
@@ -57,14 +85,25 @@ public class ChatRoom extends AppCompatActivity {
             SimpleDateFormat sdf = new SimpleDateFormat("EEEE,dd-MMM-yyyy-hh-mm-ss a", Locale.getDefault());
             String currentDateandTime = sdf.format(timeNow);
 
-            //clear the edittext:
-            edittext.setText("");
+            ContentValues newRow = new ContentValues();// like intent or Bundle
+            //Message column:        //name of tabke name
+            newRow.put( MyOpenHelper.COL_MESSAGE , whatisType  ); //got tospecify what goes into each rows
 
-            messages.add(new ChatMessage(whatisType,currentDateandTime));//adds to array list
+            //Send or receive column:
+            newRow.put(MyOpenHelper.COL_SEND_RECEIVE, 1);
 
+            //TimeSent column:
+            newRow.put( MyOpenHelper.COL_TIME_SENT, currentDateandTime );
+
+            //now that columns are full, you insert:
+            //incase misssing a variable the database should set null in the columns
+            long id = theDatabase.insert( MyOpenHelper.TABLE_NAME, null, newRow ); //returns the id
+
+            ChatMessage cm=new ChatMessage(whatisType,1,currentDateandTime,id);
+            messages.add(cm);
             //refresh the list:
             /*  adt.notifyItemInserted(messages.size() - 1); //just insert the new row:*/
-            adt.notifyDataSetChanged();
+            //adt.notifyDataSetChanged();
             Toast.makeText(this, "View Updated", Toast.LENGTH_LONG).show();
 
         });
@@ -173,13 +212,15 @@ public class ChatRoom extends AppCompatActivity {
     private class ChatMessage {
 
         String message;
-        // int sendOrReceive;
+        int sendOrReceive;
         String timeSent;
+        long id;
 
-        public ChatMessage(String message, String timeSent) {
+        public ChatMessage(String message,int sendOrReceive, String timeSent, long id) {
             this.message = message;
-            //  this.sendOrReceive = sendOrReceive;
+            this.sendOrReceive = sendOrReceive;
             this.timeSent = timeSent;
+            setId(id);
         }
 
 
@@ -187,22 +228,31 @@ public class ChatRoom extends AppCompatActivity {
 
             return timeSent;
         }
+        public int getsendOrReceive() {
 
+            return sendOrReceive;
+        }
         public String getMessage() {
             return message;
+        }
+        public void setId(long id) {
+            this.id = id;
+        }
+        public void getId(long id) {
+            this.id = id;
         }
 
         @Override
         public String toString() {
             return "ChatMessage{" +
                     "message='" + message + '\'' +
+                    ", sendOrReceive=" + sendOrReceive +
                     ", timeSent='" + timeSent + '\'' +
+                    ", id=" + id +
                     '}';
         }
 
-        /// public int getSendOrReceive() {
-        // return sendOrReceive;
-        // }
+
     }
 
 }
